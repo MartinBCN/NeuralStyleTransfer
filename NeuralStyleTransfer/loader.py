@@ -45,7 +45,7 @@ class ImageLoader(object):
     def load_styles(self) -> (Tensor, Tensor, Tensor):
         data = Path(__file__).parents[1] / 'styles'
 
-        filenames = {'Mona Lisa': 'monalisa', 'Picasso': 'picasso', 'Starry Night': 'starry'}
+        filenames = {'Mona Lisa': 'monalisa', 'Picasso': 'picasso', 'Starry Night': 'starry', 'Monet': 'monet'}
         styles = {k: self._single_image(f'{data}/{v}.jpg') for k, v in filenames.items()}
 
         return styles

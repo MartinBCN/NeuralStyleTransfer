@@ -33,7 +33,7 @@ def main():
 
     col1, col2, col3 = st.beta_columns(3)
 
-    style = col1.selectbox(label='Select Image Style', options=['Mona Lisa', 'Starry Night', 'Picasso'])
+    style = col1.selectbox(label='Select Image Style', options=['Mona Lisa', 'Starry Night', 'Picasso', 'Monet'])
     periods = col2.slider(label='Periods', min_value=2, max_value=30, value=2, step=1)
     resolution = col3.slider(label='Resolution', min_value=128, max_value=1024, value=128, step=128)
 
