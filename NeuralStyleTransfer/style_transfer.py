@@ -22,7 +22,12 @@ def get_input_optimizer(input_img: Tensor):
 
 class NeuralStyleTransfer:
     device = torch.device("cuda" if torch.cuda.is_available() and (not os.environ.get('USE_CPU', False)) else "cpu")
-    cnn = models.vgg19(pretrained=True).features.to(device).eval()
+
+    cnn = models.vgg19(pretrained=False)
+    p = os.environ.get('MODEL_PATH', '/home/martin/Programming/Python/NeuralStyleTransfer/model/vgg19-dcbb9e9d.pth')
+    cnn.load_state_dict(torch.load(p))
+
+    cnn = cnn.features.to(device).eval()
     normalization = Normalization().to(device)
 
     def __init__(self, content_layers: List[str] = None, style_layers: List[str] = None,
@@ -148,3 +153,7 @@ class NeuralStyleTransfer:
         print(input_img)
 
         return input_img
+
+
+if __name__ == '__main__':
+    nst = NeuralStyleTransfer()

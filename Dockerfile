@@ -1,7 +1,9 @@
 
 FROM python:3.8
 
-#ENV DATA_DIR=/data
+RUN curl https://download.pytorch.org/models/vgg19-dcbb9e9d.pth -o vgg19-dcbb9e9d.pth
+
+ENV MODEL_PATH='vgg19-dcbb9e9d.pth'
 
 COPY requirements.txt .
 
