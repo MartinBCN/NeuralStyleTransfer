@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import os
+
 import torch
 from PIL import Image
 import torchvision.transforms as transforms
@@ -7,8 +9,10 @@ from torch import Tensor
 
 
 class ImageLoader(object):
+
+    device = torch.device("cuda" if torch.cuda.is_available() and (not os.environ.get('USE_CPU', False)) else "cpu")
+
     def __init__(self):
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # desired size of the output image
         image_size = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
