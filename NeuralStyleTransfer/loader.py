@@ -29,7 +29,6 @@ class ImageLoader(object):
 
     def pil_to_tensor(self, image: Image) -> Tensor:
 
-        print(image)
         # fake batch dimension required to fit network's input dimensions
         image = self.loader(image).unsqueeze(0)
         return image.to(self.device, torch.float)
