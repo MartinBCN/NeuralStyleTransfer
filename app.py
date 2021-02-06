@@ -21,15 +21,15 @@ def imshow(tensor, title=None):
 
 
 def main():
-    loader = ImageLoader()
-
-    styles = loader.load_styles()
 
     style = st.selectbox(label='Select Image Style', options=['Mona Lisa', 'Starry Night', 'Picasso'])
 
-    style_tensor = styles[style]
-    print('Style shape', style_tensor.shape)
     periods = st.slider(label='Periods', min_value=2, max_value=30, value=10, step=1)
+    resolution = st.slider(label='Resolution', min_value=128, max_value=1024, value=128, step=128)
+
+    loader = ImageLoader(resolution)
+    styles = loader.load_styles()
+    style_tensor = styles[style]
 
     uploaded_file = st.file_uploader("Choose an image...", type="jpg")
     if uploaded_file is not None:
@@ -37,7 +37,6 @@ def main():
         # st.image(image, caption='Uploaded Image.', use_column_width=True)
 
         content_tensor = loader.pil_to_tensor(image)
-        print('Content shape', content_tensor.shape)
 
         input_img = content_tensor.clone()
 

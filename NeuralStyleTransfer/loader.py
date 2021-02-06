@@ -13,13 +13,14 @@ class ImageLoader(object):
 
     device = torch.device("cuda" if torch.cuda.is_available() and (not os.environ.get('USE_CPU', False)) else "cpu")
 
-    def __init__(self):
+    def __init__(self, image_size: int = None):
 
-        # desired size of the output image
-        image_size = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
+        if image_size is None:
+            # desired size of the output image
+            image_size = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
 
         self.loader = transforms.Compose([
-                transforms.Resize(image_size),  # scale imported image
+                transforms.Resize((image_size, image_size)),  # scale imported image
                 transforms.ToTensor()])  # transform it into a torch tensor
 
     def _single_image(self, image_name: str) -> Tensor:
@@ -27,6 +28,8 @@ class ImageLoader(object):
         return self.pil_to_tensor(image)
 
     def pil_to_tensor(self, image: Image) -> Tensor:
+
+        print(image)
         # fake batch dimension required to fit network's input dimensions
         image = self.loader(image).unsqueeze(0)
         return image.to(self.device, torch.float)
@@ -41,7 +44,7 @@ class ImageLoader(object):
         return style_img, content_img
 
     def load_styles(self) -> (Tensor, Tensor, Tensor):
-        data = Path(__file__).parents[1] / 'data'
+        data = Path(__file__).parents[1] / 'styles'
 
         filenames = {'Mona Lisa': 'monalisa', 'Picasso': 'picasso', 'Starry Night': 'starry'}
         styles = {k: self._single_image(f'{data}/{v}.jpg') for k, v in filenames.items()}
@@ -50,7 +53,13 @@ class ImageLoader(object):
 
 
 if __name__ == '__main__':
-    s, c = ImageLoader().load_images()
+    loader = ImageLoader()
+    s, c = loader.load_images()
 
     print(s.shape)
     print(c.shape)
+
+    style = loader.load_styles()
+
+    for s in style.values():
+        print(s.shape)
