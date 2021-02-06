@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import os
+from pathlib import Path
 
 import torch
 from PIL import Image
@@ -23,6 +24,9 @@ class ImageLoader(object):
 
     def _single_image(self, image_name: str) -> Tensor:
         image = Image.open(image_name)
+        return self.pil_to_tensor(image)
+
+    def pil_to_tensor(self, image: Image) -> Tensor:
         # fake batch dimension required to fit network's input dimensions
         image = self.loader(image).unsqueeze(0)
         return image.to(self.device, torch.float)
@@ -35,6 +39,14 @@ class ImageLoader(object):
         assert style_img.size() == content_img.size(), "we need to import style and content images of the same size"
 
         return style_img, content_img
+
+    def load_styles(self) -> (Tensor, Tensor, Tensor):
+        data = Path(__file__).parents[1] / 'data'
+
+        filenames = {'Mona Lisa': 'monalisa', 'Picasso': 'picasso', 'Starry Night': 'starry'}
+        styles = {k: self._single_image(f'{data}/{v}.jpg') for k, v in filenames.items()}
+
+        return styles
 
 
 if __name__ == '__main__':

@@ -1,0 +1,4 @@
+1) download pth in docker
+2) allow setting resolution
+3) fix transformation on on both axes
+4) transform image dimensions back afterwards

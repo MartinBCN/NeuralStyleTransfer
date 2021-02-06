@@ -110,8 +110,7 @@ class NeuralStyleTransfer:
         content_weight = 1
 
         print('Optimizing..')
-        run = [0]
-        while run[0] <= self.num_steps:
+        for i in range(self.num_steps):
 
             def closure():
                 # correct the values of updated input image
@@ -133,9 +132,8 @@ class NeuralStyleTransfer:
                 loss = style_score + content_score
                 loss.backward()
 
-                run[0] += 1
-                if run[0] % 1 == 0:
-                    print("run {}:".format(run))
+                if i % 1 == 0:
+                    print(f"run {i}:")
                     print('Style Loss : {:4f} Content Loss: {:4f}'.format(
                         style_score.item(), content_score.item()))
                     print()
@@ -146,5 +144,7 @@ class NeuralStyleTransfer:
 
         # a last correction...
         input_img.data.clamp_(0, 1)
+
+        print(input_img)
 
         return input_img
